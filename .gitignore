@@ -1,0 +1,15 @@
+# IDE metadata
+/.idea
+/.vscode
+*.out
+
+# Binaries for programs and plugins
+*.exe
+*.exe~
+main
+
+# Dependancies
+/vendor
+
+# Test binary, built with `go test -c`
+*.test

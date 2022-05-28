@@ -1,0 +1,11 @@
+version: '3'
+services:
+  app:
+    container_name: iban_api
+    build: .
+    command: go run main.go
+    ports: 
+      - 3000:3000
+    restart: on-failure
+    volumes:
+      - .:/iban_api

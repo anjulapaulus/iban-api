@@ -3,7 +3,7 @@ package iban
 import "testing"
 
 func TestNewIbanValidator(t *testing.T) {
-	validator, err := NewIbanValidator(CountryIBANInformation)
+	validator, err := NewIbanValidator(CountryIBAN)
 	if err != nil {
 		t.Error(err)
 	}
@@ -14,7 +14,7 @@ func TestNewIbanValidator(t *testing.T) {
 }
 
 func TestValidateFakeIbans(t *testing.T) {
-	validator, err := NewIbanValidator(CountryIBANInformation)
+	validator, err := NewIbanValidator(CountryIBAN)
 	if err != nil {
 		t.Error(err)
 	}
@@ -72,7 +72,7 @@ func TestValidate(t *testing.T) {
 		},
 	}
 
-	validator, err := NewIbanValidator(CountryIBANInformation)
+	validator, err := NewIbanValidator(CountryIBAN)
 	if err != nil {
 		t.Error(err)
 	}

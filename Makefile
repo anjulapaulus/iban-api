@@ -6,13 +6,13 @@ DARWIN=$(BINARY_NAME)-darwin-amd64
 
 ## to build binaries for each platform
 ## Build for Windows
-windows:  
+build_windows:  
 	GOARCH=amd64 go build -o $(WINDOWS) main.go
 ## Build for Linux
-linux: 
+build_linux: 
 	GOARCH=amd64 go build -o $(LINUX) main.go
 ## Build for Darwin (macOS)
-darwin:
+build_darwin:
 	GOARCH=amd64 go build -o $(DARWIN) main.go
 
 

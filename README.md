@@ -1,3 +1,7 @@
+[![Pipeline](https://github.com/anjulapaulus/iban-api/actions/workflows/go.yml/badge.svg)](https://github.com/anjulapaulus/iban-api/actions/workflows/go.yml)
+[![codecov](https://codecov.io/gh/anjulapaulus/iban-api/branch/main/graph/badge.svg?token=gpb1RqnMrx)](https://codecov.io/gh/anjulapaulus/iban-api)
+[![Go Report Card](https://goreportcard.com/badge/github.com/anjulapaulus/iban-api)](https://goreportcard.com/report/github.com/anjulapaulus/iban-api)
+
 # IBAN API
 
 This api is responsible in validating IBAN numbers.

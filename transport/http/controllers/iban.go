@@ -16,7 +16,7 @@ type IBANController struct {
 
 func NewIBANController() *IBANController {
 
-	validator, err := iban.NewIbanValidator(iban.CountryIBANInformation)
+	validator, err := iban.NewIbanValidator(iban.CountryIBAN)
 	if err != nil {
 		panic(err)
 	}

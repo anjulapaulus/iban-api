@@ -1,8 +1,8 @@
 package iban
 
+// Defined for future values could be added.
 type Country struct {
-	// Length of IBAN code
-	Length int
+	Length int // length of IBAN code
 }
 
 // sample country lengths predefined.

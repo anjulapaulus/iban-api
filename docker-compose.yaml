@@ -1,7 +1,7 @@
 version: '3'
 services:
   app:
-    container_name: iban_api
+    container_name: iban-api
     build: .
     command: go run main.go
     ports: 

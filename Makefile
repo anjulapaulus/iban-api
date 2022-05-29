@@ -1,25 +1,71 @@
 BINARY_NAME=iban-api
 
-build:
-	GOARCH=amd64 GOOS=darwin go build -o ${BINARY_NAME}-darwin main.go
-	GOARCH=amd64 GOOS=linux go build -o ${BINARY_NAME}-linux main.go
-	GOARCH=amd64 GOOS=window go build -o ${BINARY_NAME}-windows main.go
+WINDOWS=$(BINARY_NAME)-windows-amd64.exe
+LINUX=$(BINARY_NAME)-linux-amd64
+DARWIN=$(BINARY_NAME)-darwin-amd64
+
+## to build binaries for each platform
+## Build for Windows
+windows:  
+	GOARCH=amd64 go build -o $(WINDOWS) main.go
+## Build for Linux
+linux: 
+	GOARCH=amd64 go build -o $(LINUX) main.go
+## Build for Darwin (macOS)
+darwin:
+	GOARCH=amd64 go build -o $(DARWIN) main.go
+
+
+## OS env is only in windows
+ifeq ($(OS),Windows_NT)
+    os := Windows
+else
+    os := $(shell uname -s)
+endif
+
+## Build for all platforms specified
+build: 
+ifeq ($(os), Windows)
+    env GOOS=windows GOARCH=amd64 go build -o $(WINDOWS) main.go
+endif
+ifeq ($(os), Linux)
+	env GOOS=linux GOARCH=amd64 go build -o $(LINUX) main.go
+endif
+ifeq ($(os), Darwin)
+    env GOOS=darwin GOARCH=amd64 go build -o $(DARWIN) main.go
+endif
+
 
 run:
-	./${BINARY_NAME}
+ifeq ($(os), Windows)
+   ./$(WINDOWS)
+endif
+ifeq ($(os), Linux)
+	./$(LINUX)
+endif
+ifeq ($(os), Darwin)
+    ./$(DARWIN)
+endif
 
 test:
-	go test ./... -coverprofile=coverage.out
-	go tool cover -func coverage.out | grep total | awk '{print $3}'
-	rm coverage.out
+	go test -coverpkg=./... -coverprofile coverProfile.out ./...
+	go tool cover -func coverProfile.out | grep total | awk '{print $3}'
+	rm coverProfile.out
 
 build_and_run: build run
 
 clean:
+	rm -f $(WINDOWS) $(LINUX) $(DARWIN)
 	go clean
-	rm ${BINARY_NAME}-darwin
-	rm ${BINARY_NAME}-linux
-	rm ${BINARY_NAME}-windows
-	rm coverage.out
+
+docker_run:
+	docker-compose up -d
+
+docker_rm:
+	docker stop iban-api
+	docker rm iban-api
+
+.PHONY: all test clean
 
 all: test build run
+

@@ -15,6 +15,7 @@ type IbanValidator struct {
 	rwMu         *sync.RWMutex
 }
 
+// NewIbanValidator - provides a new validator instance
 func NewIbanValidator(cinfo map[string]Country) (*IbanValidator, error) {
 	if len(cinfo) < 1 {
 		return nil, errors.New("nil map passed")
@@ -24,6 +25,19 @@ func NewIbanValidator(cinfo map[string]Country) (*IbanValidator, error) {
 		rwMu:         new(sync.RWMutex),
 	}, nil
 }
+
+/*
+Validate - validates a given iban string
+
+Validations
+-----------
+1. Check that the total IBAN length is correct as per the country. If not, the IBAN is invalid
+2. Move the four initial characters to the end of the string.
+3. Replace each letter in the string with two digits, thereby expanding the string, where A = 10, B = 11, ..., Z = 35
+4. Interpret the string as a decimal integer and compute the remainder of that number on division by 97.
+
+If the remainder is 1, the check digit test is passed and the IBAN might be valid.
+*/
 
 func (v *IbanValidator) Validate(iban string) (bool, error) {
 	// convert string to uppercase
@@ -45,7 +59,7 @@ func (v *IbanValidator) Validate(iban string) (bool, error) {
 
 	// validate total iban length based on country
 	if len(s) != ci.Length {
-		return false, fmt.Errorf("IBAN length and length specified cofr country code %v mismatch. Actual IBAN length: %v, Specified length: %v", countryCode, len(s), ci.Length)
+		return false, fmt.Errorf("iban length mismatch - actual defined length: %d string length: %d", ci.Length, len(s))
 	}
 
 	// Move the four initial characters to the end of the string
@@ -70,6 +84,7 @@ func (v *IbanValidator) Validate(iban string) (bool, error) {
 	if !ok {
 		return false, errors.New("SetString error")
 	}
+
 	divisor := new(big.Int).SetInt64(97)
 
 	remainder := new(big.Int).Mod(n, divisor)
@@ -78,5 +93,5 @@ func (v *IbanValidator) Validate(iban string) (bool, error) {
 		return true, nil
 	}
 
-	return false, errors.New("IBAN has incorrect check digits")
+	return false, errors.New("iban has incorrect check digits")
 }
